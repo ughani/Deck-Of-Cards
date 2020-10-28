@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -7,7 +8,7 @@ namespace DeckOfCardsTest
 {
     class DeckOfCards
     {
-        RestClient client;
+        private RestClient client;
         public DeckOfCards()
         {
             client = new RestClient("https://deckofcardsapi.com/");
@@ -15,20 +16,26 @@ namespace DeckOfCardsTest
 
         public string CreateDeck(bool joker)
         {
-            //var url = joker ? "api/deck/new/{}" : "api/deck/new";
-            
-            var request = new RestRequest($"api/deck/new/jokers_enabled={joker}");
+          
+            var request = new RestRequest($"/api/deck/new?jokers_enabled={joker}");
 
-            var response =  client.Post(request);
+            var response =  client.Get(request);
             JObject jo = JObject.Parse(response.Content);
 
             return jo["deck_id"].Value<string>();
         }
+        public JObject DrawCard(string id, int count)
+        {
+         
+            var request = new RestRequest($"/api/deck/{id}/draw?count={count}");
 
+            var response = client.Post(request);
+            JObject jo = JObject.Parse(response.Content);
+
+            return jo;
+        }
 
     }
 
-    //DeckOfCards dc = new DeckOfCards();
-    //var deckid = dc.CreateDeck(bool joker)
-    //var card = dc.DrawCard(deckid,count)
+
 }
