@@ -1,6 +1,5 @@
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using RestSharp;
 using System.Collections.Generic;
 using System.Linq;
 
